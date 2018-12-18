@@ -1,3 +1,11 @@
+# Intellij files
+.idea/
+
+# Excluded modules
+out/
+build/
+.gradle
+
 # Compiled class file
 *.class
 
