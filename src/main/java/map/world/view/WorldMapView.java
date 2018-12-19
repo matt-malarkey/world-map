@@ -1,7 +1,9 @@
-package map.world;
+package map.world.view;
 
+import map.world.effect.WorldMapEffect;
+
+// TODO: docs
 public interface WorldMapView {
-
-  void put_pixels();
-
+  void clear();
+  void update(WorldMapEffect effect);
 }
