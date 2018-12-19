@@ -1,7 +1,6 @@
 package map.world;
 
 import map.world.effect.TestAll;
-import map.world.view.SimulationView;
 import map.world.view.WorldMapView;
 
 // TODO: make singleton?
@@ -68,6 +67,6 @@ public class WorldMapController {
   }
 
   public static void main(String[] args) {
-    new WorldMapController(new SimulationView());
+    new WorldMapController(null);
   }
 }
