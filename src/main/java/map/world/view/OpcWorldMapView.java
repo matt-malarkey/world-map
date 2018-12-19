@@ -15,42 +15,50 @@ import java.util.List;
  */
 public final class OpcWorldMapView implements WorldMapView {
 
-  private static final int NUM_PIXELS = 3; //TODO: check
-  private final PixelStrip[] strips = new PixelStrip[8];
+  // Server configuration
+  private static final String DEFAULT_SERVER = "127.0.0.1";
+  private static final int DEFAULT_PORT = 7890;
+
+  // Pixel configuration
+  // TODO: read from config files?
+  private static final int[] pixelsPerStrip = {63, 60, 64, 44, 60, 64, 52, 64};
 
   private final OpcClient server;
+  private final PixelStrip[] strips = new PixelStrip[8];
 
-  // TODO: move to constants, no magic numbers
   public OpcWorldMapView() {
-    // TODO: compose with port for different views? figure this out
-    server = new OpcClient("127.0.0.1", 7890);
+    this(DEFAULT_PORT);
+  }
+
+  public OpcWorldMapView(int port) {
+    server = new OpcClient(DEFAULT_SERVER, port);
     OpcDevice fadeCandy = server.addDevice();
 
-    // TODO: read from config
-    for (int i = 0; i < 8; i++) {
-      strips[i] = fadeCandy.addPixelStrip(0, 10);
+    for (int i = 0; i < pixelsPerStrip.length; i++) {
+      strips[i] = fadeCandy.addPixelStrip(i, pixelsPerStrip[i]);
     }
-    //System.out.println(server.getConfig());
+    System.out.println(server.getConfig());
   }
 
   @Override public void clear() {
-    // TODO: Set all pixels to black
-  }
-
-  // TODO
-  private PixelStrip getStripForIndex(int i) {
-    return strips[0];
+    for (int strip = 0; strip < pixelsPerStrip.length; strip++) {
+      for (int pixel = 0; pixel < pixelsPerStrip[strip]; pixel++) {
+        strips[strip].setPixelColor(pixel, 0);
+      }
+    }
+    server.show();
   }
 
   @Override public void update(WorldMapEffect effect) {
-    // TODO: write pixels from effect to display
-
     // Given a WorldMapEffect representation, update the OPC stuff accordingly
     List<Integer> pixels = effect.getPixelList();
-    for (int pixel = 0; pixel < NUM_PIXELS; pixel++) {
-      getStripForIndex(pixel).setPixelColor(pixel, pixels.get(pixel));
+    int total = 0;
+    for (int strip = 0; strip < pixelsPerStrip.length; strip++) {
+      for (int pixel = 0; pixel < pixelsPerStrip[strip]; pixel++) {
+        strips[strip].setPixelColor(pixel, pixels.get(pixel + total));
+      }
+      total += pixelsPerStrip[strip];
     }
-
     server.show();
   }
 }

@@ -6,12 +6,14 @@ import java.util.List;
 
 public abstract class WorldMapEffect implements Runnable {
 
-  private final WorldMapView view;
-  private final int framePause; // TODO: think of a better name
+  static final int NUM_PIXELS = 471;
 
-  public WorldMapEffect(WorldMapView view, int framePause) {
+  private final WorldMapView view;
+  private final int frameDelay;
+
+  public WorldMapEffect(WorldMapView view, int frameDelay) {
     this.view = view;
-    this.framePause = framePause;
+    this.frameDelay = frameDelay;
 
     // Setup pixel_info
     // TODO: what to store in base class
@@ -34,7 +36,7 @@ public abstract class WorldMapEffect implements Runnable {
         view.update(this); // TODO: provide public method to view to call to get pixel list or whatever it needs.
 
         // Sleep between frames
-        Thread.sleep(framePause);
+        Thread.sleep(frameDelay);
 
       // Must catch and re-interrupt in case the thread sleep was interrupted
       } catch (InterruptedException e) {
