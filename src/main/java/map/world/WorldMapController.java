@@ -1,6 +1,7 @@
 package map.world;
 
 import map.world.effect.TestAll;
+import map.world.view.OpcWorldMapView;
 import map.world.view.WorldMapView;
 
 // TODO: make singleton?
@@ -9,7 +10,7 @@ public class WorldMapController {
   // View to update when pixels change
   private final WorldMapView view;
 
-  private WorldMapController(WorldMapView view) {
+  public WorldMapController(WorldMapView view) {
     this.view = view;
     run();
   }
@@ -24,11 +25,11 @@ public class WorldMapController {
     Thread effectRunner = new Thread(new TestAll(view));
 
     // Start the effect
-    effectRunner.run();
+    effectRunner.start();
 
     // Run effect for 5 seconds before exiting
     try {
-      Thread.sleep(5000);
+      Thread.sleep(3000);
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
@@ -67,6 +68,6 @@ public class WorldMapController {
   }
 
   public static void main(String[] args) {
-    new WorldMapController(null);
+    new WorldMapController(new OpcWorldMapView());
   }
 }
