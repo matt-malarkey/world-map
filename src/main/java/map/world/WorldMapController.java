@@ -1,6 +1,7 @@
 package map.world;
 
 import map.world.effect.TestAll;
+import map.world.effect.WorldMapEffect;
 import map.world.view.OpcWorldMapView;
 import map.world.view.WorldMapView;
 
@@ -22,7 +23,7 @@ public class WorldMapController {
     // Set up basic server (for command line run args)
 
     // Set startup screen effect
-    Thread effectRunner = new Thread(new TestAll(view));
+    WorldMapEffect effectRunner = new TestAll(view);
 
     // Start the effect
     effectRunner.start();
@@ -57,14 +58,8 @@ public class WorldMapController {
 //      pthread_mutex_unlock((pthread_mutex_t *) &sa.mutex);
 //    }
 
-    // TODO: make effects extend Thread class and add public method to do the below operations to end.
     // Stop running the current effect and exit
-    effectRunner.interrupt();
-    try {
-      effectRunner.join();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
+    effectRunner.close();
   }
 
   public static void main(String[] args) {

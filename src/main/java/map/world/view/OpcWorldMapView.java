@@ -49,8 +49,13 @@ public final class OpcWorldMapView implements WorldMapView {
     server.show();
   }
 
+  // TODO: need maps from:
+  //  1. pixel num to strip num
+  //  2.
+
+  // TODO: consider not copying across
   @Override public void update(WorldMapEffect effect) {
-    // Given a WorldMapEffect representation, update the OPC stuff accordingly
+    // Given a WorldMapEffect representation, update the OPC pixel strips
     List<Integer> pixels = effect.getPixelList();
     int total = 0;
     for (int strip = 0; strip < pixelsPerStrip.length; strip++) {
