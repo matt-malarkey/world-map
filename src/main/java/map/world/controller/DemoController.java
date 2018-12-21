@@ -1,5 +1,9 @@
 package map.world.controller;
 
+import map.world.effect.TestAll;
+import map.world.effect.WorldMapEffect;
+import map.world.view.WorldMapView;
+
 import java.util.Optional;
 
 public class DemoController implements WorldMapController {
@@ -24,5 +28,9 @@ public class DemoController implements WorldMapController {
     }
 
     return Optional.of(WorldMapCommand.EXIT);
+  }
+
+  @Override public WorldMapEffect getEffectToRun(WorldMapView view) {
+    return new TestAll(view);
   }
 }

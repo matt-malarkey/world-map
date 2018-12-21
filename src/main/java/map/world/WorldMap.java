@@ -14,11 +14,20 @@ public class WorldMap {
 
   private final WorldMapController controller;
   private final WorldMapView view;
+  private WorldMapEffect effect;
 
   public WorldMap(WorldMapController controller, WorldMapView view) {
     this.controller = controller;
     this.view = view;
+
+    // Set startup screen effect
+    effect = new TestAll(view);
+
     run();
+  }
+
+  private void setEffectFromController() {
+    effect = controller.getEffectToRun(view);
   }
 
   // Main run loop
@@ -27,11 +36,8 @@ public class WorldMap {
     // Set up control server thread
     // Set up basic server (for command line run args)
 
-    // Set startup screen effect
-    WorldMapEffect effectRunner = new TestAll(view);
-
     // Start the effect
-    effectRunner.start();
+    effect.start();
 
     // Run the main loop
     final AtomicBoolean shouldExit = new AtomicBoolean(false);
@@ -42,13 +48,13 @@ public class WorldMap {
       {
         switch (cmd) {
           case PLAY:
-            effectRunner.play();
+            effect.play();
             break;
           case PAUSE:
-            effectRunner.pause();
+            effect.pause();
             break;
           case RUN:
-            System.out.println("Running effect ?");
+            setEffectFromController();
             break;
           case EXIT:
             shouldExit.set(true);
@@ -65,7 +71,7 @@ public class WorldMap {
     }
 
     // Stop running the current effect and exit
-    effectRunner.close();
+    effect.kill();
   }
 
   public static void main(String[] args) {

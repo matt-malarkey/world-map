@@ -44,7 +44,7 @@ public abstract class WorldMapEffect extends Thread {
     return Arrays.asList(pixels);
   }
 
-  public final void close() {
+  public final void kill() {
     isDead = true;
   }
 
