@@ -10,7 +10,7 @@ public class TestAll extends WorldMapEffect {
     super(view, FRAME_PAUSE);
   }
 
-  @Override public void calculate_next_frame(int frame) {
+  @Override public void calculateNextFrame(int frame) {
     if (frame < NUM_PIXELS) {
       setPixel(frame, 255);
     }

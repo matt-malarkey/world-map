@@ -4,5 +4,5 @@ public enum WorldMapCommand {
   PAUSE,
   PLAY,
   RUN,
-  EXIT;
+  EXIT
 }

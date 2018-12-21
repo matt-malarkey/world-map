@@ -33,19 +33,19 @@ public class WorldMap {
     // Start the effect
     effectRunner.start();
 
-    // TODO: use callbacks as in MVC model
     // Run the main loop
     final AtomicBoolean shouldExit = new AtomicBoolean(false);
+    // TODO: use callbacks as in MVC model
     while (!shouldExit.get()) {
       // Handle controller input, if any
       controller.getCommand().ifPresent(cmd ->
       {
         switch (cmd) {
           case PLAY:
-            System.out.println("Play");
+            effectRunner.play();
             break;
           case PAUSE:
-            System.out.println("Pause");
+            effectRunner.pause();
             break;
           case RUN:
             System.out.println("Running effect ?");
