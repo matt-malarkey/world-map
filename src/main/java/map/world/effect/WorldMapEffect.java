@@ -14,6 +14,10 @@ public abstract class WorldMapEffect extends Thread {
   private final int frameDelay;
   private final Integer[] pixels = new Integer[NUM_PIXELS];
 
+  // To enable playing/pausing of effect
+  private final Object playBlocker = new Object();
+  private boolean shouldPlay = true;
+
   private volatile boolean isDead = false;
   private int currentFrame = 0;
 
@@ -25,10 +29,10 @@ public abstract class WorldMapEffect extends Thread {
     IntStream.range(0, NUM_PIXELS).forEach(i -> pixels[i] = 0);
   }
 
-  abstract void calculate_next_frame(int frame);
+  abstract void calculateNextFrame(int frame);
 
-  private void advance_frame() {
-    calculate_next_frame(currentFrame);
+  private void advanceFrame() {
+    calculateNextFrame(currentFrame);
     currentFrame++;
   }
 
@@ -53,13 +57,29 @@ public abstract class WorldMapEffect extends Thread {
     }
   }
 
+  private void blockIfPaused() {
+    synchronized (playBlocker) {
+      if (!shouldPlay) {
+        try {
+          // Block until another thread calls notify on playBlocker
+          playBlocker.wait();
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+  }
+
   @Override public final void run() {
     view.clear();
 
     // Run this effect until interrupted by controller
     while (!isDead) {
+      // Make sure playing of effect is enabled
+      blockIfPaused();
+
       // Update pixels for next frame then update display
-      advance_frame();
+      advanceFrame();
       view.update(this);
 
       // Sleep between frames
@@ -67,5 +87,18 @@ public abstract class WorldMapEffect extends Thread {
     }
 
     view.clear();
+  }
+
+  public final void play() {
+    if (!shouldPlay) {
+      shouldPlay = true;
+      synchronized (playBlocker) {
+        playBlocker.notify();
+      }
+    }
+  }
+
+  public final void pause() {
+    shouldPlay = false;
   }
 }
