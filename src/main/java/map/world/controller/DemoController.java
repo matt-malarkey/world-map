@@ -8,29 +8,44 @@ import java.util.Optional;
 
 public class DemoController implements WorldMapController {
 
-  private int count = 0;
+  // Time between effects to run in milliseconds
+  private final int TIME_BETWEEN_EFFECTS = 20 * 1000;
+  private long nextEffectAt = System.currentTimeMillis() + TIME_BETWEEN_EFFECTS;
 
-  // Do nothing, then pause, then play, then exit.
+  private DemoEffect nextEffectToRun;
+
+  // TODO: need to find a way better way to do this, use method references??
+  private enum DemoEffect {
+    TEST_ALL,
+    RAVER_PLAID,
+    LAVA_LAMP;
+
+    public DemoEffect next() {
+      return values()[(this.ordinal() + 1) % values().length];
+    }
+  }
+
+  // Return command to play next effect if more than TIME_BETWEEN_EFFECTS has
+  // elapsed since the last effect started
   @Override public Optional<WorldMapCommand> getCommand() {
-    if (count < 1) {
-      count++;
-      return Optional.empty();
+    if (System.currentTimeMillis() > nextEffectAt) {
+      nextEffectAt = System.currentTimeMillis() + TIME_BETWEEN_EFFECTS;
+      nextEffectToRun = nextEffectToRun.next();
+      return Optional.of(WorldMapCommand.RUN);
     }
-
-    if (count < 10) {
-      count++;
-      return Optional.of(WorldMapCommand.PAUSE);
-    }
-
-    if (count < 11) {
-      count++;
-      return Optional.of(WorldMapCommand.PLAY);
-    }
-
-    return Optional.of(WorldMapCommand.EXIT);
+    return Optional.empty();
   }
 
   @Override public WorldMapEffect getEffectToRun(WorldMapView view) {
-    return new TestAll(view);
+    switch (nextEffectToRun) {
+      case TEST_ALL:
+        return new TestAll(view);
+      case RAVER_PLAID:
+        return null;
+      case LAVA_LAMP:
+        return null;
+      default:
+        return null;
+    }
   }
 }

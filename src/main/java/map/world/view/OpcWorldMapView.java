@@ -37,7 +37,7 @@ public final class OpcWorldMapView implements WorldMapView {
     for (int i = 0; i < pixelsPerStrip.length; i++) {
       strips[i] = fadeCandy.addPixelStrip(i, pixelsPerStrip[i]);
     }
-    System.out.println(server.getConfig());
+    //System.out.println(server.getConfig());
   }
 
   @Override public void clear() {

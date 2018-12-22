@@ -1,6 +1,6 @@
 package map.world;
 
-import map.world.controller.DemoController;
+import map.world.controller.TestController;
 import map.world.controller.WorldMapController;
 import map.world.effect.TestAll;
 import map.world.effect.WorldMapEffect;
@@ -75,6 +75,6 @@ public class WorldMap {
   }
 
   public static void main(String[] args) {
-    new WorldMap(new DemoController(), new OpcWorldMapView());
+    new WorldMap(new TestController(), new OpcWorldMapView());
   }
 }
