@@ -9,6 +9,8 @@ import java.util.stream.IntStream;
 public abstract class WorldMapEffect extends Thread {
 
   static final int NUM_PIXELS = 471;
+  static final int MAP_WIDTH = 53;
+  static final int MAP_HEIGHT = 24;
 
   private final WorldMapView view;
   private final int frameDelay;
