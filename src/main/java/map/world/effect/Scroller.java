@@ -1,5 +1,6 @@
 package map.world.effect;
 
+import map.world.view.OpcPixel;
 import map.world.view.WorldMapView;
 
 public class Scroller extends WorldMapEffect {
@@ -24,28 +25,28 @@ public class Scroller extends WorldMapEffect {
     for (int x = 60; x < BUFF_WIDTH; x++) {
       for (int y = 0; y < MAP_HEIGHT; y++) {
         int c = (x * (255 / (BUFF_WIDTH - 60)));
-        bufferedGrid[x][y] = {255, 0, c}; // TODO: figure out colours properly
+        bufferedGrid[x][y] = OpcPixel.makePixel(255, 0, c);
       }
     }
 
     // Set background buffer
     for (int x = 0; x < 60; x++) {
       for (int y = 0; y < MAP_HEIGHT; y++) {
-        bufferedGrid[x][y] = {255, 0, 255}; // TODO: figure out colours properly
+        bufferedGrid[x][y] = OpcPixel.makePixel(255, 0, 255);
       }
     }
 
     // COMPLETE hack but I am way too tired
     for (int x = 85; x < 100; x++) {
       for (int y = 0; y < MAP_HEIGHT; y++) {
-        bufferedGrid[x][y] = {255, 0, 255}; // TODO: figure out colours properly
+        bufferedGrid[x][y] = OpcPixel.makePixel(255, 0, 255);
       }
     }
 
     // Set opc_pixel_t grid to all purple
     for (int x = 0; x < MAP_WIDTH; x++) {
       for (int y = 0; y < MAP_HEIGHT; y++) {
-        setPixel(getPosition(x, y), {255, 0, 255}); // TODO: figure out colours properly
+        setPixel(getPosition(x, y), OpcPixel.makePixel(255, 0, 255));
       }
     }
   }
