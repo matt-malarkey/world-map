@@ -9,9 +9,8 @@ public class Scroller extends WorldMapEffect {
 
   // Create a buffer pixel grid to contain data about to be displayed
   private final int BUFF_WIDTH = 100;
-  private int[][] bufferedGrid = new int[MAP_HEIGHT][BUFF_WIDTH];
-  
-  private int startPosition;
+  private int startPosition = 0;
+  private int[][] bufferedGrid = new int[BUFF_WIDTH][MAP_HEIGHT];
 
   public Scroller(WorldMapView view) {
     super(view, FRAME_DELAY);
@@ -46,27 +45,24 @@ public class Scroller extends WorldMapEffect {
     // Set opc_pixel_t grid to all purple
     for (int x = 0; x < MAP_WIDTH; x++) {
       for (int y = 0; y < MAP_HEIGHT; y++) {
-        setPixel(getPosition(x, y), OpcPixel.makePixel(255, 0, 255));
+        setPixel(x, y, OpcPixel.makePixel(255, 0, 255));
       }
     }
-  }
-
-  // TODO: read from config, put in abstract class.
-  private int getPosition(int x, int y) {
-    return 0;
   }
 
   @Override void calculateNextFrame(int frame) {
     // Update the pixel list displayed in the view from the fixed buffer grid
-    for (int x = startPosition; x < MAP_WIDTH + startPosition; x++) {
+    for (int x = 0; x < MAP_WIDTH; x++) {
       for (int y = 0; y < MAP_HEIGHT; y++) {
-        int effectiveX = x % BUFF_WIDTH;
-        int pos = getPosition(effectiveX, y);
-        if (pos >= 0) {
-          setPixel(pos, bufferedGrid[effectiveX][y]);
-        }
+        int effectiveX = (x + startPosition) % BUFF_WIDTH;
+        setPixel(x, y, bufferedGrid[effectiveX][y]);
       }
     }
+
+    // Make sure position never overflows by resetting when it reaches width
     startPosition++;
+    if (startPosition >= MAP_WIDTH) {
+      startPosition = 0;
+    }
   }
 }
