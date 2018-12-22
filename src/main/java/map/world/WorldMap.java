@@ -1,7 +1,9 @@
 package map.world;
 
+import map.world.controller.SingleEffectTest;
 import map.world.controller.TestController;
 import map.world.controller.WorldMapController;
+import map.world.effect.Scroller;
 import map.world.effect.TestAll;
 import map.world.effect.WorldMapEffect;
 import map.world.view.OpcWorldMapView;
@@ -21,7 +23,7 @@ public class WorldMap {
     this.view = view;
 
     // Set startup screen effect
-    effect = new TestAll(view);
+    effect = new Scroller(view);
 
     run();
   }
@@ -75,6 +77,6 @@ public class WorldMap {
   }
 
   public static void main(String[] args) {
-    new WorldMap(new TestController(), new OpcWorldMapView());
+    new WorldMap(new SingleEffectTest(), new OpcWorldMapView());
   }
 }
