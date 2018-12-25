@@ -19,7 +19,6 @@ public class OneByOne extends WorldMapEffect {
     // Search to end of current row
     for (int x = currX; x < MAP_WIDTH; x++) {
       if (setPixel(x, currY, OpcPixel.makePixel(255, 0, 255))) {
-        System.out.println("turning on: (" + x + ", " + currY + ")");
         currX = x + 1;
         return;
       }
@@ -29,7 +28,6 @@ public class OneByOne extends WorldMapEffect {
     for (int y = currY + 1; y < MAP_HEIGHT; y++) {
       for (int x = 0; x < MAP_WIDTH; x++) {
         if (setPixel(x, y, OpcPixel.makePixel(255, 0, 255))) {
-          System.out.println("turning on: (" + x + ", " + y + ")");
           currY = y;
           currX = x;
           return;

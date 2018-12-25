@@ -21,7 +21,7 @@ public final class OpcWorldMapView implements WorldMapView {
 
   // Pixel configuration
   // TODO: read from config files?
-  private static final int[] pixelsPerStrip = {63, 60, 64, 44, 60, 64, 52, 64};
+  public static final int[] pixelsPerStrip = {63, 60, 64, 44, 60, 64, 52, 64};
 
   private final OpcClient server;
   private final PixelStrip[] strips = new PixelStrip[8];

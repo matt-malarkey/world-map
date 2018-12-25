@@ -8,12 +8,16 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.IntStream;
+
+import static map.world.view.OpcWorldMapView.pixelsPerStrip;
 
 public abstract class WorldMapEffect extends Thread {
 
   // Dimension constants
   static final int NUM_PIXELS = 471;
+  static final int NUM_STRIPS = 8;
   static final int MAP_WIDTH = 53;
   static final int MAP_HEIGHT = 24;
 
@@ -22,6 +26,9 @@ public abstract class WorldMapEffect extends Thread {
 
   // To read in configuration files to, addressed by [x][y] from top left
   private final int[][] pixelPositionToNumber = new int[MAP_WIDTH][MAP_HEIGHT];
+
+  // TODO: comment
+  private final int[] pixelNumToOpcNum = new int[NUM_PIXELS];
 
   private final WorldMapView view;
   private final int frameDelay;
@@ -45,13 +52,16 @@ public abstract class WorldMapEffect extends Thread {
 
     // Set up pixel position to int config array
     readPixelPositionConfig();
+
+    // Set up number of pixel num to opc pixel map // TODO: must be done after previous call currently, change this?
+    readPixelStripConfig();
   }
 
   private void readPixelPositionConfig() {
     // Initialise the mapping to -1 for all x, y
     for (int x = 0; x < MAP_WIDTH; x++) {
       for (int y = 0; y < MAP_HEIGHT; y++) {
-        pixelPositionToNumber[x][y] = -1;
+        pixelPositionToNumber[x][y] = -2;
       }
     }
 
@@ -74,8 +84,49 @@ public abstract class WorldMapEffect extends Thread {
     }
   }
 
-  private int getPosition(int x, int y) {
-    return pixelPositionToNumber[x][y];
+  //channel | position_in_channel | pixel_number
+  private void readPixelStripConfig() {
+    // Store a list mapping internal pixel_number (from config file) to physical pixel number, calculated from channel and position_in_channel
+
+    //pixelsPerStrip[i] gives number of pixels in strip i
+    // Build up a cumulative list of how many pixels to add for to index a certain strip
+    int[] numPixelsBeforeStrip = new int[NUM_STRIPS];
+    numPixelsBeforeStrip[0] = 0;
+    for (int i = 0; i < NUM_STRIPS - 1; i++) {
+      numPixelsBeforeStrip[i + 1] = numPixelsBeforeStrip[i] + pixelsPerStrip[i];
+    }
+
+    // Initialise the mapping to -1 for all, just in case - TODO: remove redundancy
+    for (int i = 0; i < NUM_PIXELS; i++) {
+      pixelNumToOpcNum[i] = -1;
+    }
+
+    // TODO: move to constants
+    String configFile = "/Users/Matt/Projects/ARM Project/world-map/src/main/java/map/world/view/strip_config.txt";
+    String delimiter = " ";
+    String line;
+
+    try (BufferedReader br = new BufferedReader(new FileReader(configFile))) {
+      while ((line = br.readLine()) != null) {
+        String[] info = line.split(delimiter);
+
+        int strip = Integer.parseInt(info[0]);
+        int posInStrip = Integer.parseInt(info[1]);
+        int pixelNum = Integer.parseInt(info[2]);
+
+        pixelNumToOpcNum[pixelNum] = numPixelsBeforeStrip[strip] + posInStrip;
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  private Optional<Integer> getPosition(int x, int y) {
+    int internalPixelNum = pixelPositionToNumber[x][y];
+    if (internalPixelNum < 0 || internalPixelNum >= NUM_PIXELS) {
+      return Optional.empty();
+    }
+    return Optional.of(pixelNumToOpcNum[internalPixelNum]);
   }
 
   abstract void calculateNextFrame(int frame);
@@ -93,12 +144,9 @@ public abstract class WorldMapEffect extends Thread {
     assert (x < MAP_WIDTH) : "x was greater than the width of the map";
     assert (y < MAP_HEIGHT) : "y was greater than the height of the map";
 
-    int position = getPosition(x, y);
-    if (position >= 0 && position < NUM_PIXELS) {
-      setPixel(position, colour);
-      return true;
-    }
-    return false;
+    Optional<Integer> pixel = getPosition(x, y);
+    pixel.ifPresent(position -> setPixel(position, colour));
+    return pixel.isPresent();
   }
 
   public final List<Integer> getPixelList() {
