@@ -3,6 +3,7 @@ package map.world;
 import map.world.controller.SingleEffectTest;
 import map.world.controller.TestController;
 import map.world.controller.WorldMapController;
+import map.world.effect.OneByOne;
 import map.world.effect.Scroller;
 import map.world.effect.TestAll;
 import map.world.effect.WorldMapEffect;
@@ -23,7 +24,7 @@ public class WorldMap {
     this.view = view;
 
     // Set startup screen effect
-    effect = new Scroller(view);
+    effect = new OneByOne(view);
 
     run();
   }

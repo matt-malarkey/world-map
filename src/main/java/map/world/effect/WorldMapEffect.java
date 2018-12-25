@@ -20,8 +20,8 @@ public abstract class WorldMapEffect extends Thread {
   static final int BLACK_PIXEL = OpcPixel.makePixel(0, 0, 0);
   static final int WHITE_PIXEL = OpcPixel.makePixel(255, 255, 255);
 
-  // To read in configuration files to
-  private int[][] pixelPositionToNumber = new int[MAP_WIDTH][MAP_HEIGHT];
+  // To read in configuration files to, addressed by [x][y] from top left
+  private final int[][] pixelPositionToNumber = new int[MAP_WIDTH][MAP_HEIGHT];
 
   private final WorldMapView view;
   private final int frameDelay;
@@ -89,14 +89,16 @@ public abstract class WorldMapEffect extends Thread {
     pixels[pixelNum] = colour;
   }
 
-  public final void setPixel(int x, int y, int colour) {
+  public final boolean setPixel(int x, int y, int colour) {
     assert (x < MAP_WIDTH) : "x was greater than the width of the map";
     assert (y < MAP_HEIGHT) : "y was greater than the height of the map";
 
     int position = getPosition(x, y);
     if (position >= 0 && position < NUM_PIXELS) {
       setPixel(position, colour);
+      return true;
     }
+    return false;
   }
 
   public final List<Integer> getPixelList() {
