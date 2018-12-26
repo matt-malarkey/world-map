@@ -61,7 +61,7 @@ public class Scroller extends WorldMapEffect {
 
     // Make sure position never overflows by resetting when it reaches width
     startPosition++;
-    if (startPosition >= MAP_WIDTH) {
+    if (startPosition >= BUFF_WIDTH) {
       startPosition = 0;
     }
   }
