@@ -5,7 +5,7 @@ import map.world.view.WorldMapView;
 
 public class OneByOne extends WorldMapEffect {
 
-  private static final int FRAME_DELAY = 10;
+  private static final int FRAME_DELAY = 20;
 
   private int currX = 0;
   private int currY = 0;
@@ -16,6 +16,12 @@ public class OneByOne extends WorldMapEffect {
 
   // Find next x, y, that is mapped to, then turn on that pixel
   @Override void calculateNextFrame(int frame) {
+    // TODO: Not mapped to internal pixel num 90
+    //setPixel(52, 2, OpcPixel.makePixel(255, 255, 255));
+
+    // TODO: Weird mapping for internal pixel num 143
+    //setPixel(31, 4, OpcPixel.makePixel(255, 255, 255));
+
     // Search to end of current row
     for (int x = currX; x < MAP_WIDTH; x++) {
       if (setPixel(x, currY, OpcPixel.makePixel(255, 0, 255))) {
@@ -29,7 +35,7 @@ public class OneByOne extends WorldMapEffect {
       for (int x = 0; x < MAP_WIDTH; x++) {
         if (setPixel(x, y, OpcPixel.makePixel(255, 0, 255))) {
           currY = y;
-          currX = x;
+          currX = x + 1;
           return;
         }
       }

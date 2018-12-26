@@ -50,10 +50,13 @@ public abstract class WorldMapEffect extends Thread {
     // Set up pixel list
     IntStream.range(0, NUM_PIXELS).forEach(i -> pixels[i] = BLACK_PIXEL);
 
-    // Set up pixel position to int config array
-    readPixelPositionConfig();
+    // Set up configuration maps for internal and opc pixel num mappings
+    readConfigFiles();
+  }
 
-    // Set up number of pixel num to opc pixel map // TODO: must be done after previous call currently, change this?
+  // Set up pixel position to int and pixel num to opc pixel config arrays
+  private void readConfigFiles() {
+    readPixelPositionConfig();
     readPixelStripConfig();
   }
 
@@ -84,21 +87,15 @@ public abstract class WorldMapEffect extends Thread {
     }
   }
 
-  //channel | position_in_channel | pixel_number
+  // Store a list mapping internal pixel_number (from config file) to physical
+  // pixel number, calculated from channel and position_in_channel
   private void readPixelStripConfig() {
-    // Store a list mapping internal pixel_number (from config file) to physical pixel number, calculated from channel and position_in_channel
-
     //pixelsPerStrip[i] gives number of pixels in strip i
     // Build up a cumulative list of how many pixels to add for to index a certain strip
     int[] numPixelsBeforeStrip = new int[NUM_STRIPS];
     numPixelsBeforeStrip[0] = 0;
     for (int i = 0; i < NUM_STRIPS - 1; i++) {
       numPixelsBeforeStrip[i + 1] = numPixelsBeforeStrip[i] + pixelsPerStrip[i];
-    }
-
-    // Initialise the mapping to -1 for all, just in case - TODO: remove redundancy
-    for (int i = 0; i < NUM_PIXELS; i++) {
-      pixelNumToOpcNum[i] = -1;
     }
 
     // TODO: move to constants
