@@ -118,7 +118,7 @@ public abstract class WorldMapEffect extends Thread {
     }
   }
 
-  private Optional<Integer> getPosition(int x, int y) {
+  public Optional<Integer> getPosition(int x, int y) {
     int internalPixelNum = pixelPositionToNumber[x][y];
     if (internalPixelNum < 0 || internalPixelNum >= NUM_PIXELS) {
       return Optional.empty();
