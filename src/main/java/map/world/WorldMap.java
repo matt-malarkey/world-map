@@ -3,7 +3,6 @@ package map.world;
 import map.world.controller.SingleEffectTest;
 import map.world.controller.WorldMapController;
 import map.world.effect.CoordTest;
-import map.world.effect.StripTest;
 import map.world.effect.WorldMapEffect;
 import map.world.view.OpcWorldMapView;
 import map.world.view.WorldMapView;
