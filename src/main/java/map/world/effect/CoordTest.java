@@ -3,14 +3,14 @@ package map.world.effect;
 import map.world.view.OpcPixel;
 import map.world.view.WorldMapView;
 
-public class OneByOne extends WorldMapEffect {
+public class CoordTest extends WorldMapEffect {
 
-  private static final int FRAME_DELAY = 20;
+  private static final int FRAME_DELAY = 10;
 
   private int currX = 0;
   private int currY = 0;
 
-  public OneByOne(WorldMapView view) {
+  public CoordTest(WorldMapView view) {
     super(view, FRAME_DELAY);
   }
 

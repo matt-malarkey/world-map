@@ -1,6 +1,6 @@
 package map.world.controller;
 
-import map.world.effect.TestAll;
+import map.world.effect.StripTest;
 import map.world.effect.WorldMapEffect;
 import map.world.view.WorldMapView;
 
@@ -39,7 +39,7 @@ public class DemoController implements WorldMapController {
   @Override public WorldMapEffect getEffectToRun(WorldMapView view) {
     switch (nextEffectToRun) {
       case TEST_ALL:
-        return new TestAll(view);
+        return new StripTest(view);
       case RAVER_PLAID:
         return null;
       case LAVA_LAMP:

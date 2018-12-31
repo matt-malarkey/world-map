@@ -1,6 +1,6 @@
 package map.world.controller;
 
-import map.world.effect.TestAll;
+import map.world.effect.StripTest;
 import map.world.effect.WorldMapEffect;
 import map.world.view.WorldMapView;
 
@@ -31,6 +31,6 @@ public class TestController implements WorldMapController {
   }
 
   @Override public WorldMapEffect getEffectToRun(WorldMapView view) {
-    return new TestAll(view);
+    return new StripTest(view);
   }
 }

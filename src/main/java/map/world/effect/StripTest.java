@@ -3,11 +3,11 @@ package map.world.effect;
 import map.world.view.OpcPixel;
 import map.world.view.WorldMapView;
 
-public class TestAll extends WorldMapEffect {
+public class StripTest extends WorldMapEffect {
 
   private static final int FRAME_DELAY = 1;
 
-  public TestAll(WorldMapView view) {
+  public StripTest(WorldMapView view) {
     super(view, FRAME_DELAY);
   }
 
