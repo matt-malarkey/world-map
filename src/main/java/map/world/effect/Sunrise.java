@@ -1,5 +1,6 @@
 package map.world.effect;
 
+import map.world.view.OpcPixel;
 import map.world.view.WorldMapView;
 
 import java.io.BufferedReader;
@@ -59,8 +60,67 @@ public class Sunrise extends WorldMapEffect {
     }
   }
 
+  // Based on rules in C version - TODO: simplify in aux.
   private int calculateSunlight(int pixel) {
     SunTiming sunTiming = pixelSunTimings.get(pixel);
+    LocalTime sunrise = sunTiming.sunrise;
+    LocalTime sunset = sunTiming.sunset;
+
+    long daylight = Duration.between(sunset, sunrise).toMinutes() * 60;
+
+    // If sunset/sunrise time is the same, pixel is always off
+    if (daylight == 0) {
+    //if (sunrise.equals(sunset)) {
+      return BLACK_PIXEL;
+    }
+
+    // Sunrise time is before sunset
+    else if (daylight > 0) {
+    //if (sunrise.isBefore(sunset)) {
+      long beforeSunrise = Duration.between(sunrise, internalTime).toMinutes() * 60;
+      if (beforeSunrise < 0) {
+      //if (internalTime.isAfter(sunrise)) {
+        long beforeSunset = Duration.between(sunset, internalTime).toMinutes() * 60;
+        if (beforeSunset > 0) {
+        //if (internalTime.isBefore(sunset)) {
+          int col = (int) ((beforeSunset / (daylight / 2.0)) * 255);
+          col = (col > 255) ? 255 - col : col;
+          return OpcPixel.makeWhite(col);
+        }
+      }
+    }
+
+    // Sunset time is before sunrise
+    else {
+      long beforeSunset = Duration.between(sunset, internalTime).toMinutes() * 60;
+      if (beforeSunset > 0) {
+        daylight += (3600 * 24);
+        int col = (int) ((beforeSunset / (daylight / 2.0)) * 255);
+        col = (col > 255) ? 255 - col : col;
+        return OpcPixel.makeWhite(col);
+
+      } else {
+        long beforeSunrise = Duration.between(sunrise, internalTime).toMinutes() * 60;
+        if (beforeSunrise < 0) {
+          // Current is after sunrise
+          daylight += (3600 * 24);
+          int col = (int) ((-beforeSunrise / (daylight / 2.0)) * 255);
+          col = (col > 255) ? 255 - col : col;
+          return OpcPixel.makeWhite(col);
+        }
+      }
+    }
+
+    return BLACK_PIXEL;
+  }
+
+  private int calculateSunlightAux(int pixel) {
+    SunTiming sunTiming = pixelSunTimings.get(pixel);
+
+    // If sunset/sunrise time is the same, pixel is always on
+    if (sunTiming.sunrise.equals(sunTiming.sunset)) {
+      return WHITE_PIXEL;
+    }
 
     // If pixel has sun up at internal world time, turn on
     if (internalTime.isAfter(sunTiming.sunrise)

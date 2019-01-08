@@ -17,6 +17,11 @@ public class OpcPixel {
     return (r << 16) | (g << 8) | (b) ;
   }
 
+  // Make a greyscale pixel with brightness given
+  public static int makeWhite(int white) {
+    return makePixel(white, white, white);
+  }
+
   // Extract the red component from a colour integer
   public static int getRed(int colour) {
     return (colour >> 16) & 0x000000FF;
