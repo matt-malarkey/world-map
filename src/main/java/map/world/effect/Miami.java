@@ -14,7 +14,7 @@ public class Miami extends WorldMapEffect {
   private final long startTime = System.currentTimeMillis();
 
   public Miami(WorldMapView view) {
-    super(view, FRAME_DELAY);
+    super(view, FRAME_DELAY, true);
 
     // Generate random values
     for (int i = 0; i < NUM_PIXELS; i++) {

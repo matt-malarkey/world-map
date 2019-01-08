@@ -8,7 +8,7 @@ public class Sunrise extends WorldMapEffect {
   private static final int FRAME_DELAY = 20;
 
   public Sunrise(WorldMapView view) {
-    super(view, FRAME_DELAY);
+    super(view, FRAME_DELAY, true);
 
     // TODO: Read in config file here
   }

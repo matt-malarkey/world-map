@@ -32,6 +32,7 @@ public abstract class WorldMapEffect extends Thread {
 
   private final WorldMapView view;
   private final int frameDelay;
+  private final boolean effectIsLooped;
 
   // Pixel list
   private final Integer[] pixels = new Integer[NUM_PIXELS];
@@ -40,12 +41,13 @@ public abstract class WorldMapEffect extends Thread {
   private final Object playBlocker = new Object();
   private boolean shouldPlay = true;
 
-  private volatile boolean isDead = false;
+  private volatile boolean shouldEnd = false;
   private int currentFrame = 0;
 
-  public WorldMapEffect(WorldMapView view, int frameDelay) {
+  public WorldMapEffect(WorldMapView view, int frameDelay, boolean isLooped) {
     this.view = view;
     this.frameDelay = frameDelay;
+    this.effectIsLooped = isLooped;
 
     // Set up pixel list
     IntStream.range(0, NUM_PIXELS).forEach(i -> pixels[i] = BLACK_PIXEL);
@@ -150,8 +152,8 @@ public abstract class WorldMapEffect extends Thread {
     return Arrays.asList(pixels);
   }
 
-  public final void kill() {
-    isDead = true;
+  public final void end() {
+    shouldEnd = true;
   }
 
   private void frameSleepBetween() {
@@ -180,7 +182,7 @@ public abstract class WorldMapEffect extends Thread {
     view.clear();
 
     // Run this effect until interrupted by controller
-    while (!isDead) {
+    while (!shouldEnd) {
       // Make sure playing of effect is enabled
       blockIfPaused();
 
@@ -192,7 +194,9 @@ public abstract class WorldMapEffect extends Thread {
       frameSleepBetween();
     }
 
-    view.clear();
+    if (effectIsLooped) {
+      view.clear();
+    }
   }
 
   public final void play() {

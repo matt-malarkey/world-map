@@ -8,7 +8,7 @@ public class StripTest extends WorldMapEffect {
   private static final int FRAME_DELAY = 1;
 
   public StripTest(WorldMapView view) {
-    super(view, FRAME_DELAY);
+    super(view, FRAME_DELAY, false);
   }
 
   @Override public void calculateNextFrame(int frame) {

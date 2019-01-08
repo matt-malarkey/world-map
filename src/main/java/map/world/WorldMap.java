@@ -71,7 +71,7 @@ public class WorldMap {
     }
 
     // Stop running the current effect and exit
-    effect.kill();
+    effect.end();
   }
 
   public static void main(String[] args) {

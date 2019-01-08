@@ -11,7 +11,7 @@ public class CoordTest extends WorldMapEffect {
   private int currY = 0;
 
   public CoordTest(WorldMapView view) {
-    super(view, FRAME_DELAY);
+    super(view, FRAME_DELAY, false);
   }
 
   // Find next x, y, that is mapped to, then turn on that pixel

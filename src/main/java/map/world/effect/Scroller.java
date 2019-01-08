@@ -13,7 +13,7 @@ public class Scroller extends WorldMapEffect {
   private int[][] bufferedGrid = new int[BUFF_WIDTH][MAP_HEIGHT];
 
   public Scroller(WorldMapView view) {
-    super(view, FRAME_DELAY);
+    super(view, FRAME_DELAY, true);
 
     // Initialise the scroller grid
     initBufferedGrid();
