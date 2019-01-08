@@ -3,6 +3,7 @@ package map.world;
 import map.world.controller.SingleEffectTest;
 import map.world.controller.WorldMapController;
 import map.world.effect.CoordTest;
+import map.world.effect.Sunrise;
 import map.world.effect.WorldMapEffect;
 import map.world.view.OpcWorldMapView;
 import map.world.view.WorldMapView;
@@ -21,7 +22,7 @@ public class WorldMap {
     this.view = view;
 
     // Set startup screen effect
-    effect = new CoordTest(view);
+    effect = new Sunrise(view);
 
     run();
   }
